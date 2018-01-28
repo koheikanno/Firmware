@@ -690,6 +690,33 @@ PARAM_DEFINE_INT32(COM_POS_FS_PROB, 30);
 PARAM_DEFINE_INT32(COM_POS_FS_GAIN, 10);
 
 /**
+ * Horizontal position error threshold.
+ *
+ *
+ * @unit m
+ * @group Commander
+ */
+PARAM_DEFINE_FLOAT(COM_POS_FS_EPH, 5);
+
+/**
+ * Vertical position error threshold.
+ *
+ *
+ * @unit m
+ * @group Commander
+ */
+PARAM_DEFINE_FLOAT(COM_POS_FS_EPV, 10);
+
+/**
+ * Horizontal velocity error threshold.
+ *
+ *
+ * @unit m
+ * @group Commander
+ */
+PARAM_DEFINE_FLOAT(COM_VEL_FS_EVH, 1);
+
+/**
  * Next flight UUID
  *
  * This number is incremented automatically after every flight on
