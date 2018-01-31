@@ -1047,7 +1047,7 @@ MavlinkReceiver::handle_message_set_actuator_control_target(mavlink_message_t *m
 			orb_copy(ORB_ID(vehicle_control_mode), _control_mode_sub, &_control_mode);
 		}
 
-		if (_control_mode.flag_control_offboard_enabled) {
+		// if (_control_mode.flag_control_offboard_enabled) {
 
 			actuator_controls.timestamp = hrt_absolute_time();
 
@@ -1100,7 +1100,7 @@ MavlinkReceiver::handle_message_set_actuator_control_target(mavlink_message_t *m
 			default:
 				break;
 			}
-		}
+		// }
 	}
 
 }
