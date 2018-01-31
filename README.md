@@ -16,6 +16,8 @@ This repository holds the [PX4 Pro](http://px4.io) flight control solution for d
   * many more experimental types (Rovers, Blimps, Boats, Submarines, etc)
 * Releases: [Downloads](https://github.com/PX4/Firmware/releases)
 
+## Stream Chasers Modifications and TODO:
+Implemented actuator controls handler as in https://github.com/PX4/Firmware/pull/7477/files. OFFBOARD mode check is bypassed.
 
 ## PX4 Users
 
