@@ -1,0 +1,3 @@
+#!nsh
+mixer load /dev/pwm_output1 /etc/mixers/pass.aux.mix
+
