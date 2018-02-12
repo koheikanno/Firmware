@@ -118,7 +118,7 @@ MavlinkReceiver::MavlinkReceiver(Mavlink *parent) :
 	_flow_distance_sensor_pub(nullptr),
 	_distance_sensor_pub(nullptr),
 	_offboard_control_mode_pub(nullptr),
-	_actuator_controls_pub(nullptr),
+	_actuator_controls_pubs{nullptr, nullptr, nullptr, nullptr},
 	_att_sp_pub(nullptr),
 	_rates_sp_pub(nullptr),
 	_pos_sp_triplet_pub(nullptr),
@@ -1041,7 +1041,7 @@ MavlinkReceiver::handle_message_set_actuator_control_target(mavlink_message_t *m
 		}
 
 
-		/* If we are in offboard control mode, publish the actuator controls */
+		/* Regardless of offboard control mode, publish the actuator controls */
 		bool updated;
 		orb_check(_control_mode_sub, &updated);
 
@@ -1049,22 +1049,60 @@ MavlinkReceiver::handle_message_set_actuator_control_target(mavlink_message_t *m
 			orb_copy(ORB_ID(vehicle_control_mode), _control_mode_sub, &_control_mode);
 		}
 
-		if (_control_mode.flag_control_offboard_enabled) {
+		// if (_control_mode.flag_control_offboard_enabled) {
 
 			actuator_controls.timestamp = hrt_absolute_time();
 
-			/* Set duty cycles for the servos in actuator_controls_0 */
-			for (size_t i = 0; i < 8; i++) {
-				actuator_controls.control[i] = set_actuator_control_target.controls[i];
-			}
+			/* Set duty cycles for the servos in the actuator_controls message */
+ 			for (size_t i = 0; i < 8; i++) {
+ 				actuator_controls.control[i] = set_actuator_control_target.controls[i];
+ 			}
+ 
 
-			if (_actuator_controls_pub == nullptr) {
-				_actuator_controls_pub = orb_advertise(ORB_ID(actuator_controls_0), &actuator_controls);
+			switch (set_actuator_control_target.group_mlx) {
+			case 0:
+				if (_actuator_controls_pubs[0] == nullptr) {
+					_actuator_controls_pubs[0] = orb_advertise(ORB_ID(actuator_controls_0), &actuator_controls);
+				} else {
+					orb_publish(ORB_ID(actuator_controls_0), _actuator_controls_pubs[0], &actuator_controls);
+				}
 
-			} else {
-				orb_publish(ORB_ID(actuator_controls_0), _actuator_controls_pub, &actuator_controls);
+				break;
+
+			case 1:
+				if (_actuator_controls_pubs[1] == nullptr) {
+					_actuator_controls_pubs[1] = orb_advertise(ORB_ID(actuator_controls_1), &actuator_controls);
+
+				} else {
+					orb_publish(ORB_ID(actuator_controls_1), _actuator_controls_pubs[1], &actuator_controls);
+				}
+
+				break;
+
+			case 2:
+				if (_actuator_controls_pubs[2] == nullptr) {
+					_actuator_controls_pubs[2] = orb_advertise(ORB_ID(actuator_controls_2), &actuator_controls);
+
+				} else {
+					orb_publish(ORB_ID(actuator_controls_2), _actuator_controls_pubs[2], &actuator_controls);
+				}
+
+				break;
+
+			case 3:
+				if (_actuator_controls_pubs[3] == nullptr) {
+					_actuator_controls_pubs[3] = orb_advertise(ORB_ID(actuator_controls_3), &actuator_controls);
+
+				} else {
+					orb_publish(ORB_ID(actuator_controls_3), _actuator_controls_pubs[3], &actuator_controls);
+				}
+
+				break;
+
+			default:
+				break;
 			}
-		}
+		// }
 	}
 
 }
